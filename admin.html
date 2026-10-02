@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>АІКС «Вибори» • Адмін-консоль</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Ліве меню */
+        aside {
+            width: 280px;
+            background: #1e293b;
+            border-right: 1px solid #334155;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .aside-header {
+            padding: 20px;
+            border-bottom: 1px solid #334155;
+            background: #0f172a;
+        }
+
+        .aside-header h2 {
+            font-size: 1.1rem;
+            color: #38bdf8;
+            margin-bottom: 5px;
+        }
+
+        .aside-header p {
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 20px 0;
+        }
+
+        .nav-links li {
+            padding: 12px 20px;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 0.95rem;
+            border-left: 4px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .nav-links li.active, .nav-links li:hover {
+            background: rgba(56, 189, 248, 0.1);
+            color: #38bdf8;
+            border-left-color: #38bdf8;
+        }
+
+        /* Центральна робоча зона */
+        main {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1e293b;
+            padding: 15px 25px;
+            border-radius: 10px;
+            border: 1px solid #334155;
+            margin-bottom: 30px;
+        }
+
+        .mode-indicator {
+            font-size: 0.9rem;
+            color: #22c55e;
+            font-weight: 500;
+        }
+
+        .btn-link {
+            background: #3b82f6;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .btn-link:hover {
+            background: #2563eb;
+        }
+
+        .card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: #38bdf8;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-bottom: 5px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px 15px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 6px;
+            color: white;
+            font-size: 0.95rem;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #38bdf8;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* Таблиця кандидатів в адмінці */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #334155;
+            font-size: 0.9rem;
+        }
+
+        th {
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        .btn-save {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: block;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .btn-save:hover {
+            background: #16a34a;
+        }
+
+        .sync-status {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: #f59e0b;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ліве навігаційне меню -->
+    <aside>
+        <div class="aside-header">
+            <h2>АІКС «ВИБОРИ»</h2>
+            <p>Адмін-консоль (Нульовий стан)</p>
+        </div>
+        <ul class="nav-links">
+            <li class="active">⚙️ Налаштування кампанії</li>
+            <li>👥 Реєстр кандидатів</li>
+            <li>📊 Оперативні протоколи</li>
+            <li>🗺️ Регіональні дані (Карта)</li>
+        </ul>
+    </aside>
+
+    <!-- Головна робоча зона -->
+    <main>
+        <div class="top-bar">
+            <div class="mode-indicator">● Статус: Режим введення даних</div>
+            <a href="index.html" target="_blank" class="btn-link">Переглянути публічне табло ↗</a>
+        </div>
+
+        <!-- Модуль А: Конфігуратор -->
+        <div class="card">
+            <h3>Модуль А: Конфігурація виборчої кампанії</h3>
+            <div class="form-group">
+                <label>Назва виборчої кампанії</label>
+                <input type="text" id="campaign-name" placeholder="Наприклад: Вибори Президента України">
+            </div>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Тип кампанії</label>
+                    <select id="campaign-type">
+                        <option value="Чергові">Чергові</option>
+                        <option value="Позачергові">Позачергові</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Етап / Тур</label>
+                    <select id="campaign-round">
+                        <option value="1">1-й тур</option>
+                        <option value="2">2-й тур (Дуель)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Модуль В: Введення оперативних показників -->
+        <div class="card">
+            <h3>Модуль В: Оперативні дані та протоколи</h3>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Відсоток опрацьованих протоколів по країні (%)</label>
+                    <input type="number" id="global-percent" step="0.01" placeholder="88.61">
+                </div>
+                <div class="form-group">
+                    <label>Лідер на загальній карті (для тесту карти)</label>
+                    <select id="map-leader-test">
+                        <option value="zelensky">Зеленський (Зелений)</option>
+                        <option value="poroshenko">Порошенко (Червоний)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Кнопка збереження -->
+        <button class="btn-save" onclick="saveData()">💾 ЗБЕРЕГТИ ТА ОПУБЛІКУВАТИ НА ТАБЛО</button>
+        <div class="sync-status" id="sync-msg">Дані ще не збережені в цій сесії.</div>
+    </main>
+
+    <script>
+        // Функція збереження даних у пам'ять браузера, щоб табло їх побачило
+        function saveData() {
+            const name = document.getElementById('campaign-name').value;
+            const type = document.getElementById('campaign-type').value;
+            const round = document.getElementById('campaign-round').value;
+            const percent = document.getElementById('global-percent').value;
+            const testLeader = document.getElementById('map-leader-test').value;
+
+            // Формуємо пакет даних
+            const electionData = {
+                name: name || "Вибори Президента України",
+                type: type,
+                round: round,
+                percent: percent || "0.00",
+                testLeader: testLeader
+            };
+
+            // Зберігаємо в localStorage
+            localStorage.setItem('aix_election_data', JSON.stringify(electionData));
+
+            // Змінюємо статус на екрані
+            document.getElementById('sync-msg0').style.color = "#22c55e";
+            document.getElementById('sync-msg').innerText = "✅ Дані успішно збережено та синхронізовано з публічним табло!";
+        }
+    </script>
+</body>
+</html>
