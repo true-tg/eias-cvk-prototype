@@ -4,185 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>АІКС «Вибори» • Публічне табло</title>
-    <!-- Підключаємо стилі (у майбутньому можна винести в окремий файл style.css) -->
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: #0f172a;
-            color: #f8fafc;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        header {
-            background: #1e293b;
-            border-bottom: 1px solid #334155;
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .logo-area h1 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        .status-badge {
-            background: #3b82f6;
-            color: white;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-
-        main {
-            flex: 1;
-            padding: 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            align-items: center;
-        }
-
-        @media (max-width: 900px) {
-            main {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .info-panel {
-            background: #1e293b;
-            border: 1px solid #334155;
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-        }
-
-        .info-panel h2 {
-            font-size: 1.25rem;
-            margin-bottom: 15px;
-            color: #38bdf8;
-        }
-
-        .info-panel p {
-            color: #94a3b8;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            background: #0f172a;
-            border: 2px dashed #334155;
-            border-radius: 8px;
-            color: #64748b;
-        }
-
-        /* Контейнер карти */
-        .map-container {
-            position: relative;
-            width: 100%;
-            background: #1e293b;
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid #334155;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #ukraine-map {
-            width: 100%;
-            height: auto;
-            max-height: 450px;
-        }
-
-        .region {
-            fill: #334155; /* Базовий нульовий сірий колір */
-            stroke: #0f172a;
-            stroke-width: 1.5;
-            cursor: pointer;
-            transition: fill 0.3s ease, stroke 0.2s ease;
-        }
-
-        .region:hover {
-            stroke: #ffffff;
-            stroke-width: 2.5;
-            opacity: 0.8;
-        }
-
-        /* Спливаюче вікно (Tooltip) */
-        .tooltip {
-            position: absolute;
-            background: rgba(15, 23, 42, 0.95);
-            color: white;
-            padding: 10px 15px;
-            border-radius: 6px;
-            border: 1px solid #38bdf8;
-            font-size: 0.85rem;
-            pointer-events: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            display: none;
-            z-index: 10;
-        }
-
-        footer {
-            background: #1e293b;
-            border-top: 1px solid #334155;
-            text-align: center;
-            padding: 15px;
-            font-size: 0.85rem;
-            color: #64748b;
-        }
-    </style>
+    <!-- Підключення оновленого державного стилю -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Шапка табла -->
+    <!-- Шапка табла (монументальний стиль) -->
     <header>
         <div class="logo-area">
             <h1>АІКС «ВИБОРИ» • Публічне табло</h1>
         </div>
-        <div class="status-badge" id="campaign-status">Система ініціалізована (Очікування даних)</div>
+        <div class="status-badge" id="campaign-status">СИСТЕМА ІНІЦІАЛІЗОВАНА (ОЧІКУВАННЯ ДАНИХ)</div>
     </header>
 
     <!-- Головна робоча зона -->
-    <main>
-        <!-- Ліва колонка: Дані по кандидатах (Порожньо на старті) -->
-        <div class="info-panel">
-            <h2>Результати голосування</h2>
-            <p>Кампанія ще не розпочалась або дані не внесені адміністратором через адмін-консоль.</p>
+    <main style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; align-items: center;">
+        
+        <!-- Ліва колонка: Результати голосування (Нульовий стан) -->
+        <div class="card" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <h3>ОПЕРАТИВНІ РЕЗУЛЬТАТИ ГОЛОСУВАННЯ</h3>
+                <p style="color: #FFFFFF; font-size: 0.95rem; margin-bottom: 20px; text-shadow: 1px 1px 1px #000;">
+                    Виборча кампанія у стані ініціалізації. Дані з окружних виборчих комісій очікуються.
+                </p>
+            </div>
             <div class="empty-state">
-                Немає зареєстрованих кандидатів та протоколів
+                НЕМАЄ ЗАРЕЄСТРОВАНИХ КАНДИДАТІВ ТА ПРОТОКОЛІВ
             </div>
         </div>
 
-        <!-- Права колонка: Інтерактивна мапа України -->
+        <!-- Права колонка: Інтерактивна мапа України (Скевоморфізм) -->
         <div class="map-container">
-            <!-- Спрощена SVG-структура карти для прототипу (усі регіони в нульовому стані) -->
             <svg id="ukraine-map" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
-                <!-- Приклади кількох ключових контурів регіонів для макета -->
+                <!-- Контури регіонів (монументальні прямі блоки для макета) -->
                 <path id="UA-32" class="region" data-name="Київська область" data-leader="Немає даних" data-percent="0.00" d="M350,200 L380,180 L410,210 L390,240 Z" />
                 <path id="UA-46" class="region" data-name="Львівська область" data-leader="Немає даних" data-percent="0.00" d="M120,220 L150,200 L170,230 L140,260 Z" />
                 <path id="UA-12" class="region" data-name="Дніпропетровська область" data-leader="Немає даних" data-percent="0.00" d="M500,280 L550,260 L580,310 L520,330 Z" />
@@ -194,35 +48,10 @@
 
     <!-- Підвал -->
     <footer>
-        Центральна виборча комісія України • Прототип вебсистеми
+        ЦЕНТРАЛЬНА ВИБОРЧА КОМІСІЯ УКРАЇНИ • АІКС «ВИБОРИ» • ВЕРСІЯ ПРОТОТИПУ 2010
     </footer>
 
-    <!-- Логіка підказок на карті (Tooltip) -->
-    <script>
-        const tooltip = document.getElementById('map-tooltip');
-        const regions = document.querySelectorAll('.region');
-
-        regions.forEach(region => {
-            region.addEventListener('mousemove', (e) => {
-                const name = region.getAttribute('data-name');
-                const leader = region.getAttribute('data-leader');
-                const percent = region.getAttribute('data-percent');
-                
-                tooltip.innerHTML = `
-                    <strong>${name}</strong><br/>
-                    Лідер: ${leader}<br/>
-                    Опрацьовано: <span style="color:#38bdf8; font-weight:bold;">${percent}%</span>
-                `;
-                
-                tooltip.style.display = 'block';
-                tooltip.style.left = (e.pageX + 15) + 'px';
-                tooltip.style.top = (e.pageY - 60) + 'px';
-            });
-
-            region.addEventListener('mouseleave', () => {
-                tooltip.style.display = 'none';
-            });
-        });
-    </script>
+    <!-- Скрипт синхронізації та підказок -->
+    <script src="script.js"></script>
 </body>
 </html>
