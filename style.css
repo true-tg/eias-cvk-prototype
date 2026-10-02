@@ -1,114 +1,119 @@
-/* --- Спільні налаштування --- */
+/* --- ЗАГАЛЬНІ СТИЛІ ТА ПАЛІТРА ДЕРЖАВНОГО СОФТУ 2000-х --- */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: Arial, Tahoma, Verdana, sans-serif;
+    border-radius: 0 !important; /* Сувора заборона будь-яких заокруглень */
 }
 
 body {
-    background-color: #0f172a;
-    color: #f8fafc;
+    background-color: #002060; /* Глибокий кобальтовий фон за ТЗ */
+    color: #FFFFFF;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
-/* --- Стилі для Шапки та Футера (Публічне табло) --- */
+/* --- ШАПКА ТА ФУТЕР --- */
 header {
-    background: #1e293b;
-    border-bottom: 1px solid #334155;
-    padding: 20px 40px;
+    background: linear-gradient(to bottom, #003399 0%, #001a4d 100%);
+    border-bottom: 3px solid #00FFFF;
+    padding: 15px 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-.logo-area {
-    display: flex;
-    align-items: center;
-    gap: 15px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);
 }
 
 .logo-area h1 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    letter-spacing: 0.5px;
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #FFFFFF;
+    text-shadow: 2px 2px 2px #000000;
+    letter-spacing: 1px;
 }
 
 .status-badge {
-    background: #3b82f6;
-    color: white;
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 500;
+    background: linear-gradient(to bottom, #0055ff 0%, #0022aa 100%);
+    color: #FFFF00; /* Жовтий акцент */
+    border: 2px solid #00FFFF;
+    padding: 8px 16px;
+    font-size: 0.95rem;
+    font-weight: bold;
+    text-shadow: 1px 1px 1px #000000;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 2px 2px 4px rgba(0,0,0,0.5);
 }
 
 footer {
-    background: #1e293b;
-    border-top: 1px solid #334155;
+    background: #001a4d;
+    border-top: 2px solid #00FFFF;
     text-align: center;
-    padding: 15px;
+    padding: 12px;
     font-size: 0.85rem;
-    color: #64748b;
+    color: #00FFFF;
+    text-shadow: 1px 1px 1px #000;
     margin-top: auto;
 }
 
-/* --- Стилі для Панелі Адміністратора (admin.html) --- */
+/* --- СТИЛІ ПАНЕЛІ АДМІНІСТРААТОРА (ADMIN.HTML) --- */
 body.admin-body {
-    flex-direction: row; /* Адмінка має ліве меню, тому рядковий розподіл */
+    flex-direction: row;
 }
 
 aside {
-    width: 280px;
-    background: #1e293b;
-    border-right: 1px solid #334155;
+    width: 300px;
+    background: linear-gradient(to right, #001a4d 0%, #001133 100%);
+    border-right: 3px solid #00FFFF;
     display: flex;
     flex-direction: column;
 }
 
 .aside-header {
     padding: 20px;
-    border-bottom: 1px solid #334155;
-    background: #0f172a;
+    border-bottom: 2px solid #00FFFF;
+    background: #000c24;
 }
 
 .aside-header h2 {
-    font-size: 1.1rem;
-    color: #38bdf8;
+    font-size: 1.15rem;
+    color: #00FFFF;
+    font-weight: bold;
+    text-shadow: 1px 1px 1px #000;
     margin-bottom: 5px;
 }
 
 .aside-header p {
     font-size: 0.8rem;
-    color: #94a3b8;
+    color: #FFFFFF;
 }
 
 .nav-links {
     list-style: none;
-    padding: 20px 0;
+    padding: 10px 0;
 }
 
 .nav-links li {
-    padding: 12px 20px;
-    color: #94a3b8;
+    padding: 14px 20px;
+    color: #FFFFFF;
     cursor: pointer;
     font-size: 0.95rem;
-    border-left: 4px solid transparent;
-    transition: all 0.3s;
+    font-weight: bold;
+    border-left: 6px solid transparent;
+    border-bottom: 1px solid #002060;
+    transition: none;
 }
 
 .nav-links li.active, .nav-links li:hover {
-    background: rgba(56, 189, 248, 0.1);
-    color: #38bdf8;
-    border-left-color: #38bdf8;
+    background: linear-gradient(to right, #003399 0%, #001a4d 100%);
+    color: #FFFF00;
+    border-left-color: #FFFF00;
 }
 
-/* --- Картки, Форми та Кнопки --- */
+/* --- РОБОЧА ЗОНА, КАРТКИ ТА ФОРМИ --- */
 main {
     flex: 1;
-    padding: 30px;
+    padding: 25px;
     overflow-y: auto;
 }
 
@@ -116,47 +121,51 @@ main {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #1e293b;
-    padding: 15px 25px;
-    border-radius: 10px;
-    border: 1px solid #334155;
-    margin-bottom: 30px;
+    background: linear-gradient(to bottom, #003399 0%, #001a4d 100%);
+    padding: 12px 20px;
+    border: 2px solid #00FFFF;
+    margin-bottom: 25px;
+    box-shadow: 3px 3px 5px rgba(0,0,0,0.5);
 }
 
 .mode-indicator {
-    font-size: 0.9rem;
-    color: #22c55e;
-    font-weight: 500;
+    font-size: 0.95rem;
+    color: #FFFF00;
+    font-weight: bold;
+    text-shadow: 1px 1px 1px #000;
 }
 
 .btn-link {
-    background: #3b82f6;
-    color: white;
+    background: linear-gradient(to bottom, #0055ff 0%, #0022aa 100%);
+    color: #FFFFFF;
+    border: 2px solid #00FFFF;
     padding: 8px 16px;
-    border-radius: 6px;
     text-decoration: none;
     font-size: 0.9rem;
-    transition: background 0.2s;
+    font-weight: bold;
+    text-shadow: 1px 1px 1px #000;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 2px 2px 3px rgba(0,0,0,0.4);
 }
 
 .btn-link:hover {
-    background: #2563eb;
+    background: linear-gradient(to bottom, #0066ff 0%, #0033cc 100%);
 }
 
 .card {
-    background: #1e293b;
-    border: 1px solid #334155;
-    border-radius: 10px;
-    padding: 25px;
+    background: #001a4d;
+    border: 3px solid #00FFFF;
+    padding: 20px;
     margin-bottom: 25px;
+    box-shadow: 4px 4px 8px rgba(0,0,0,0.6);
 }
 
 .card h3 {
     font-size: 1.1rem;
-    margin-bottom: 20px;
-    color: #38bdf8;
-    border-bottom: 1px solid #334155;
-    padding-bottom: 10px;
+    margin-bottom: 15px;
+    color: #FFFF00;
+    border-bottom: 2px solid #00FFFF;
+    padding-bottom: 8px;
+    text-shadow: 1px 1px 1px #000;
 }
 
 .form-group {
@@ -166,23 +175,27 @@ main {
 .form-group label {
     display: block;
     font-size: 0.85rem;
-    color: #94a3b8;
+    color: #00FFFF;
+    font-weight: bold;
     margin-bottom: 5px;
+    text-shadow: 1px 1px 1px #000;
 }
 
 .form-group input, .form-group select {
     width: 100%;
-    padding: 10px 15px;
-    background: #0f172a;
-    border: 1px solid #334155;
-    border-radius: 6px;
-    color: white;
-    font-size: 0.95rem;
+    padding: 10px;
+    background: #000c24;
+    border: 2px solid #00FFFF;
+    color: #FFFF00;
+    font-size: 1rem;
+    font-weight: bold;
+    box-shadow: inset 2px 2px 5px rgba(0,0,0,0.8); /* Ефект заглиблення */
 }
 
 .form-group input:focus, .form-group select:focus {
     outline: none;
-    border-color: #38bdf8;
+    border-color: #FFFF00;
+    background: #001133;
 }
 
 .grid-2 {
@@ -192,96 +205,100 @@ main {
 }
 
 .btn-save {
-    background: #22c55e;
-    color: white;
-    border: none;
-    padding: 12px 25px;
-    font-size: 1rem;
-    font-weight: 600;
-    border-radius: 8px;
+    background: linear-gradient(to bottom, #00aa00 0%, #005500 100%);
+    color: #FFFF00;
+    border: 3px solid #00FFFF;
+    padding: 14px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px #000;
     cursor: pointer;
-    transition: background 0.2s;
-    display: block;
     width: 100%;
-    margin-top: 20px;
+    margin-top: 15px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 4px 4px 6px rgba(0,0,0,0.6);
+}
+
+.btn-save:active {
+    box-shadow: inset 2px 2px 5px rgba(0,0,0,0.9);
 }
 
 .btn-save:hover {
-    background: #16a34a;
+    background: linear-gradient(to bottom, #00cc00 0%, #006600 100%);
 }
 
 .sync-status {
     text-align: center;
     margin-top: 10px;
-    font-size: 0.85rem;
-    color: #f59e0b;
+    font-size: 0.9rem;
+    color: #FFFF00;
+    font-weight: bold;
+    text-shadow: 1px 1px 1px #000;
 }
 
-/* --- Інтерактивна Мапа та Регіони (SVG) --- */
+/* --- ІНТЕРАКТИВНА МАПА ТА РЕГІОНИ (СКЕВОМОРФІЗМ) --- */
 .map-container {
     position: relative;
     width: 100%;
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
-    background: #1e293b;
+    background: #001133;
     padding: 20px;
-    border-radius: 12px;
-    border: 1px solid #334155;
+    border: 3px solid #00FFFF;
     display: flex;
     justify-content: center;
     align-items: center;
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.9), 4px 4px 10px rgba(0,0,0,0.7);
 }
 
 #ukraine-map {
     width: 100%;
     height: auto;
-    max-height: 450px;
+    max-height: 480px;
 }
 
 .region {
-    fill: #334155; /* Базовий нульовий сірий колір */
-    stroke: #0f172a;
-    stroke-width: 1.5;
+    fill: #003366; /* Темно-синій неактивний колір */
+    stroke: #00FFFF; /* Товсті контрастні межі за ТЗ (1.5-2px) */
+    stroke-width: 2;
     cursor: pointer;
-    transition: fill 0.4s ease, stroke 0.2s ease;
+    transition: none; /* Жодних плавних анімацій, все різко і чітко як в державному софті */
 }
 
 .region:hover {
-    stroke: #ffffff;
-    stroke-width: 2.5;
-    filter: drop-shadow(0px 0px 8px rgba(255, 255, 255, 0.5));
-    opacity: 0.9;
+    stroke: #FFFF00;
+    stroke-width: 3;
+    fill: #004488;
 }
 
-/* Кольорові класи для кандидатів на карті */
+/* Спектральні чисті кольори лідерів без напівтонів */
 .region.leader-zelensky {
-    fill: #22c55e; /* Зелений колір */
+    fill: #00FF00; /* Кислотно-зелений */
 }
 
 .region.leader-poroshenko {
-    fill: #ef4444; /* Червоний колір */
+    fill: #FF0000; /* Насичений червоний */
 }
 
-/* Спливаюче вікно (Tooltip) */
+/* Прямокутні плашкові віджети (Tooltip) на карті */
 .tooltip {
     position: absolute;
-    background: rgba(15, 23, 42, 0.95);
-    color: white;
-    padding: 10px 15px;
-    border-radius: 6px;
-    border: 1px solid #38bdf8;
-    font-size: 0.85rem;
+    background: #FFFFFF;
+    color: #000000;
+    padding: 8px 12px;
+    border: 2px solid #000000;
+    font-size: 0.9rem;
+    font-weight: bold;
     pointer-events: none;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    box-shadow: 3px 3px 5px rgba(0,0,0,0.8);
     display: none;
     z-index: 10;
 }
 
 .empty-state {
     text-align: center;
-    padding: 40px 20px;
-    background: #0f172a;
-    border: 2px dashed #334155;
-    border-radius: 8px;
-    color: #64748b;
+    padding: 30px;
+    background: #000c24;
+    border: 2px dashed #00FFFF;
+    color: #00FFFF;
+    font-weight: bold;
 }
