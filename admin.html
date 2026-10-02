@@ -4,34 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>АІКС «Вибори» • Адмін-консоль</title>
-    <!-- Підключення оновленого державного стилю -->
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Стиль для перемикання модулів в адмінці */
+        .admin-section { display: none; }
+        .admin-section.active-section { display: block; }
+    </style>
 </head>
 <body class="admin-body">
 
-    <!-- Ліве навігаційне меню (державний стиль) -->
+    <!-- Ліве навігаційне меню (перемикання модулів) -->
     <aside>
         <div class="aside-header">
             <h2>АІКС «ВИБОРИ»</h2>
             <p>Адмін-консоль (Нульовий стан)</p>
         </div>
         <ul class="nav-links">
-            <li class="active">⚙️ Налаштування кампанії</li>
-            <li>👥 Реєстр кандидатів</li>
-            <li>📊 Оперативні протоколи</li>
-            <li>🗺️ Регіональні дані (Карта)</li>
+            <li id="nav-mod-a" class="active" onclick="switchModule('mod-a', this)">⚙️ Налаштування кампанії</li>
+            <li id="nav-mod-b" onclick="switchModule('mod-b', this)">👥 Реєстр кандидатів</li>
+            <li id="nav-mod-c" onclick="switchModule('mod-c', this)">📊 Оперативні протоколи</li>
+            <li id="nav-mod-d" onclick="switchModule('mod-d', this)">🗺️ Регіональні дані (Карта)</li>
         </ul>
     </aside>
 
     <!-- Головна робоча зона -->
     <main>
         <div class="top-bar">
-            <div class="mode-indicator">● СТАТУС: РЕЖИМ ВВЕДЕННЯ ДАНИХ</div>
+            <div class="mode-indicator" id="top-status-indicator">● СТАТУС: НУЛЬОВИЙ СТАН (КАМПАНІЯ НЕ СТВОРЕНА)</div>
             <a href="index.html" target="_blank" class="btn-link">ПЕРЕГЛЯНУТИ ПУБЛІЧНЕ ТАБЛО ↗</a>
         </div>
 
-        <!-- Модуль А: Конфігуратор -->
-        <div class="card">
+        <!-- МОДУЛЬ А: Налаштування кампанії -->
+        <div id="mod-a" class="admin-section active-section card">
             <h3>МОДУЛЬ А: КОНФІГУРАЦІЯ ВИБОРЧОЇ КАМПАНІЇ</h3>
             <div class="form-group">
                 <label>Назва виборчої кампанії</label>
@@ -43,61 +47,261 @@
                     <select id="campaign-type">
                         <option value="Чергові">Чергові</option>
                         <option value="Позачергові">Позачергові</option>
+                        <option value="Місцеві">Місцеві</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>Етап / Тур</label>
                     <select id="campaign-round">
-                        <option value="1">1-й тур</option>
-                        <option value="2">2-й тур (Дуель)</option>
+                        <option value="1">1-й тур (Рейтинговий список)</option>
+                        <option value="2">2-й тур (Дуель та Карта)</option>
                     </select>
+                </div>
+            </div>
+            <button class="btn-save" onclick="saveConfig()">💾 ЗБЕРЕГТИ КОНФІГУРАЦІЮ</button>
+        </div>
+
+        <!-- МОДУЛЬ Б: Реєстр кандидатів -->
+        <div id="mod-b" class="admin-section card">
+            <h3>МОДУЛЬ Б: РЕЄСТР СУБ'ЄКТІВ ВИБОРЧОГО ПРОЦЕСУ (КАНДИДАТІВ)</h3>
+            <div class="grid-2">
+                <div>
+                    <div class="form-group">
+                        <label>ПІБ Кандидата</label>
+                        <input type="text" id="cand-name" placeholder="Введіть ПІБ кандидата">
+                    </div>
+                    <div class="form-group">
+                        <label>Суб'єкт висування (Партія / Самовисування)</label>
+                        <input type="text" id="cand-party" placeholder="Наприклад: Політична партія або Самовисування">
+                    </div>
+                    <div class="form-group">
+                        <label>Колірний ідентифікатор (для графіків та карти)</label>
+                        <select id="cand-color">
+                            <option value="leader-zelensky">Зелений (Спектральний)</option>
+                            <option value="leader-poroshenko">Червоний (Спектральний)</option>
+                            <option value="leader-blue">Синій (Спектральний)</option>
+                        </select>
+                    </div>
+                    <button class="btn-save" onclick="addCandidate()">➕ ДОДАТИ КАНДИДАТА</button>
+                </div>
+                <div>
+                    <label style="color: #00FFFF; font-weight: bold; margin-bottom: 10px; display: block;">Список зареєстрованих кандидатів:</label>
+                    <div id="candidates-list" style="background: #000c24; border: 2px solid #00FFFF; padding: 15px; min-height: 150px; font-size: 0.9rem;">
+                        <span style="color: #64748b;">Список порожній (Нульовий стан)</span>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Модуль В: Введення оперативних показників -->
-        <div class="card">
-            <h3>МОДУЛЬ В: ОПЕРАТИВНІ ДАНІ ТА ПРОТОКОЛИ</h3>
+        <!-- МОДУЛЬ В: Оперативні протоколи -->
+        <div id="mod-c" class="admin-section card">
+            <h3>МОДУЛЬ В: ОПЕРАТИВНІ ДАНІ ТА ПРОТОКОЛИ ЦВК</h3>
             <div class="grid-2">
                 <div class="form-group">
                     <label>Відсоток опрацьованих протоколів по країні (%)</label>
-                    <input type="number" id="global-percent" step="0.01" placeholder="88.61">
+                    <input type="number" id="global-percent" step="0.01" min="0" max="100" placeholder="0.00">
                 </div>
                 <div class="form-group">
-                    <label>Лідер на загальній карті (для тесту карти)</label>
-                    <select id="map-leader-test">
-                        <option value="zelensky">Зеленський (Зелений)</option>
-                        <option value="poroshenko">Порошенко (Червоний)</option>
+                    <label>Загальна кількість дійсних голосів ("Всього ЗА")</label>
+                    <input type="number" id="total-votes" placeholder="0">
+                </div>
+            </div>
+            <div style="margin-top: 15px;">
+                <label style="color: #00FFFF; font-weight: bold; display: block; margin-bottom: 5px;">Розподіл голосів за кандидатами:</label>
+                <div id="voting-table-container" style="background: #000c24; border: 2px solid #00FFFF; padding: 15px;">
+                    Спершу додайте кандидатів у Модулі Б!
+                </div>
+            </div>
+            <button class="btn-save" onclick="saveProtocols()">💾 ЗБЕРЕГТИ ОПЕРАТИВНІ ДАНІ</button>
+        </div>
+
+        <!-- МОДУЛЬ Г: Регіональні дані (Карта) -->
+        <div id="mod-d" class="admin-section card">
+            <h3>МОДУЛЬ Г: РЕГІОНАЛЬНИЙ РОЗПОДІЛ (ДЛЯ ІНТЕРАКТИВНОЇ КАРТИ)</h3>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Оберіть регіон України</label>
+                    <select id="region-select">
+                        <option value="UA-32">Київська область</option>
+                        <option value="UA-46">Львівська область</option>
+                        <option value="UA-12">Дніпропетровська область</option>
+                        <option value="UA-80">м. Київ</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Лідер у цьому регіоні</label>
+                    <select id="region-leader">
+                        <option value="leader-zelensky">Зелений лідер</option>
+                        <option value="leader-poroshenko">Червоний лідер</option>
                     </select>
                 </div>
             </div>
+            <div class="form-group">
+                <label>Відсоток голосів лідера в регіоні (%)</label>
+                <input type="number" id="region-percent" step="0.01" placeholder="0.00">
+            </div>
+            <button class="btn-save" onclick="saveRegionData()">💾 ОНОВИТИ ДАНІ РЕГІОНУ НА КАРТІ</button>
         </div>
 
-        <!-- Кнопка збереження -->
-        <button class="btn-save" onclick="saveData()">💾 ЗБЕРЕГТИ ТА ОПУБЛІКУВАТИ НА ТАБЛО</button>
-        <div class="sync-status" id="sync-msg">Дані ще не збережені в цій сесії.</div>
+        <div class="sync-status" id="sync-msg">Система в нульовому стані. Збережіть параметри кампанії.</div>
     </main>
 
     <script>
-        // Функція збереження даних у пам'ять браузера (localStorage)
-        function saveData() {
-            const name = document.getElementById('campaign-name').value;
-            const type = document.getElementById('campaign-type').value;
-            const round = document.getElementById('campaign-round').value;
-            const percent = document.getElementById('global-percent').value;
-            const testLeader = document.getElementById('map-leader-test').value;
+        // Глобальний об'єкт бази даних (старт з нуля)
+        let db = JSON.parse(localStorage.getItem('aix_db')) || {
+            config: { name: "", type: "Чергові", round: "1" },
+            candidates: [],
+            protocols: { globalPercent: "0.00", totalVotes: 0 },
+            regions: {
+                "UA-32": { name: "Київська обл.", leader: "", percent: "0.00" },
+                "UA-46": { name: "Львівська обл.", leader: "", percent: "0.00" },
+                "UA-12": { name: "Дніпропетровська обл.", leader: "", percent: "0.00" },
+                "UA-80": { name: "м. Київ", leader: "", percent: "0.00" }
+            }
+        };
 
-            const electionData = {
-                name: name || "Вибори Президента України",
-                type: type,
-                round: round,
-                percent: percent || "0.00",
-                testLeader: testLeader
-            };
+        // Перемикання вкладок (модулів) в адмінці
+        function switchModule(modId, element) {
+            document.querySelectorAll('.admin-section').forEach(sec => sec.classList.remove('active-section'));
+            document.querySelectorAll('.nav-links li').forEach(li => li.classList.remove('active'));
+            
+            document.getElementById(modId).classList.add('active-section');
+            element.classList.add('active');
 
-            localStorage.setItem('aix_election_data', JSON.stringify(electionData));
+            if(modId === 'mod-c') renderVotingTable();
+        }
 
-            document.getElementById('sync-msg').innerText = "✅ ДАНИХ УСПІШНО ЗБЕРЕЖЕНО ТА СИНХРОНІЗОВАНО З ПУБЛІЧНИМ ТАБЛОМ!";
+        // Завантаження збережених значень у поля форми при відкритті
+        window.onload = function() {
+            if(db.config.name) {
+                document.getElementById('campaign-name').value = db.config.name;
+                document.getElementById('campaign-type').value = db.config.type;
+                document.getElementById('campaign-round').value = db.config.round;
+                document.getElementById('top-status-indicator').innerText = "● СТАТУС: КАМПАНІЯ АКТИВНА (" + db.config.name + ")";
+            }
+            document.getElementById('global-percent').value = db.protocols.globalPercent;
+            document.getElementById('total-votes').value = db.protocols.totalVotes;
+            renderCandidatesList();
+        }
+
+        // 1. Збереження конфігурації
+        function saveConfig() {
+            db.config.name = document.getElementById('campaign-name').value;
+            db.config.type = document.getElementById('campaign-type').value;
+            db.config.round = document.getElementById('campaign-round').value;
+            
+            syncToStorage();
+            document.getElementById('top-status-indicator').innerText = "● СТАТУС: КАМПАНІЯ АКТИВНА (" + db.config.name + ")";
+            document.getElementById('sync-msg').innerText = "✅ Конфігурацію успішно збережено та передано на публічне табло!";
+        }
+
+        // 2. Додавання кандидата
+        function addCandidate() {
+            const name = document.getElementById('cand-name').value;
+            const party = document.getElementById('cand-party').value;
+            const color = document.getElementById('cand-color').value;
+
+            if(!name) {
+                alert('Введіть ПІБ кандидата!');
+                return;
+            }
+
+            db.candidates.push({ name, party, color, votes: 0, percent: "0.00" });
+            document.getElementById('cand-name').value = '';
+            document.getElementById('cand-party').value = '';
+
+            syncToStorage();
+            renderCandidatesList();
+            document.getElementById('sync-msg').innerText = "✅ Кандидата додано до реєстру!";
+        }
+
+        function renderCandidatesList() {
+            const container = document.getElementById('candidates-list');
+            if(db.candidates.length === 0) {
+                container.innerHTML = '<span style="color: #64748b;">Список порожній (Нульовий стан)</span>';
+                return;
+            }
+            let html = '<table style="width:100%; border-collapse:collapse;">';
+            db.candidates.forEach((c, idx) => {
+                html += `<tr style="border-bottom:1px solid #00FFFF;">
+                    <td style="padding:6px; color:#FFFF00; font-weight:bold;">${idx+1}. ${c.name}</td>
+                    <td style="padding:6px; color:#00FFFF;">${c.party}</td>
+                    <td style="padding:6px; text-align:right;"><button onclick="removeCandidate(${idx})" style="background:#ff0000; color:white; border:none; padding:2px 6px; cursor:pointer;">X</button></td>
+                </tr>`;
+            });
+            html += '</table>';
+            container.innerHTML = html;
+        }
+
+        function removeCandidate(index) {
+            db.candidates.splice(index, 1);
+            syncToStorage();
+            renderCandidatesList();
+        }
+
+        // Рендер таблиці голосування в Модулі В
+        function renderVotingTable() {
+            const container = document.getElementById('voting-table-container');
+            if(db.candidates.length === 0) {
+                container.innerHTML = 'Спершу додайте кандидатів у Модулі Б!';
+                return;
+            }
+            let html = '<table style="width:100%; border-collapse:collapse;"><tr><th style="text-align:left; color:#00FFFF;">Кандидат</th><th style="color:#00FFFF;">Абсолютні голоси ЗА</th><th style="color:#00FFFF;">Розрахований %</th></tr>';
+            db.candidates.forEach((c, idx) => {
+                html += `<tr>
+                    <td style="padding:8px; font-weight:bold; color:white;">${c.name}</td>
+                    <td style="padding:8px;"><input type="number" id="votes-${idx}" value="${c.votes}" oninput="calculateVotes(${idx})" style="padding:6px; background:#002060; border:1px solid #00FFFF; color:#FFFF00; font-weight:bold;"></td>
+                    <td style="padding:8px; text-align:center; color:#FFFF00; font-weight:bold;" id="percent-${idx}">${c.percent}%</td>
+                </tr>`;
+            });
+            html += '</table>';
+            container.innerHTML = html;
+        }
+
+        // Автоматичний підрахунок відсотків
+        function calculateVotes(idx) {
+            const totalVotes = parseFloat(document.getElementById('total-votes').value) || 0;
+            const candidateVotes = parseFloat(document.getElementById(`votes-${idx}`).value) || 0;
+            
+            db.candidates[idx].votes = candidateVotes;
+            if(totalVotes > 0) {
+                let calc = (candidateVotes / totalVotes) * 100;
+                db.candidates[idx].percent = calc.toFixed(2);
+                document.getElementById(`percent-${idx}`).innerText = calc.toFixed(2) + '%';
+            } else {
+                db.candidates[idx].percent = "0.00";
+                document.getElementById(`percent-${idx}`).innerText = "0.00%";
+            }
+        }
+
+        // Збереження протоколів
+        function saveProtocols() {
+            db.protocols.globalPercent = document.getElementById('global-percent').value;
+            db.protocols.totalVotes = document.getElementById('total-votes').value;
+            syncToStorage();
+            document.getElementById('sync-msg').innerText = "✅ Оперативні протоколи успішно збережено та опубліковано!";
+        }
+
+        // Збереження регіональних даних карти
+        function saveRegionData() {
+            const regId = document.getElementById('region-select').value;
+            const leader = document.getElementById('region-leader').value;
+            const percent = document.getElementById('region-percent').value;
+
+            db.regions[regId].leader = leader;
+            db.regions[regId].percent = percent;
+
+            sync_data_to_tablo();
+            document.getElementById('sync-msg').innerText = "✅ Дані регіону оновлено на інтерактивній карті!";
+        }
+
+        // Загальна синхронізація в localStorage
+        function syncToStorage() {
+            localStorage.setItem('aix_db', JSON.stringify(db));
+        }
+
+        function sync_data_to_tablo() {
+            syncToStorage();
         }
     </script>
 </body>
