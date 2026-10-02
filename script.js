@@ -1,68 +1,61 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Завантажуємо збережені дані з пам'яті браузера (localStorage)
-    const savedDataJSON = localStorage.getItem('aix_election_data');
-    
-    if (savedDataJSON) {
-        const data = JSON.parse(savedDataJSON);
+    // Зчитуємо єдину базу даних з localStorage
+    const savedDB = localStorage.getItem('aix_db');
+    if (!savedDB) return;
 
-        // Оновлюємо назву кампанії на публічному табло, якщо вона там є
-        const titleElement = document.querySelector('header h1');
-        if (titleElement && data.name) {
-            titleElement.innerText = `АІКС «ВИБОРИ» • ${data.name}`;
-        }
+    const db = JSON.parse(savedDB);
 
-        // Оновлюємо статус-бейдж (показуємо відсоток опрацьованих протоколів)
-        const statusBadge = document.getElementById('campaign-status');
-        if (statusBadge && data.percent) {
-            statusBadge.innerText = `Опрацьовано протоколів: ${data.percent}%`;
-        }
+    // 1. Оновлюємо шапку табла
+    const titleElement = document.querySelector('header h1');
+    if (titleElement && db.config.name) {
+        titleElement.innerText = `АІКС «ВИБОРИ» • ${db.config.name}`;
+    }
 
-        // 2. Тестова логіка для карти (фарбуємо регіони на основі вибору в адмінці)
-        if (data.testLeader) {
-            const regions = document.querySelectorAll('.region');
-            regions.forEach(region => {
-                // Оновлюємо дата-атрибути
-                region.setAttribute('data-leader', data.testLeader === 'zelensky' ? 'В. Зеленський' : 'П. Порошенко');
-                region.setAttribute('data-percent', data.percent || '0.00');
+    const statusBadge = document.getElementById('campaign-status');
+    if (statusBadge) {
+        statusBadge.innerText = `ОПРАЦЬОВАНО ПРОТОКОЛІВ ПО КРАЇНІ: ${db.protocols.globalPercent || '0.00'}%`;
+    }
 
-                // Очищаємо старі класи кольорів
-                region.classList.remove('leader-zelensky', 'leader-poroshenko');
-
-                // Додаємо новий клас залежно від лідера
-                if (data.testLeader === 'zelensky') {
-                    region.classList.add('leader-zelensky');
-                } else if (data.testLeader === 'poroshenko') {
-                    region.classList.add('leader-poroshenko');
-                }
+    // 2. Рендеримо результати кандидатів у лівій колонці табло
+    const infoPanel = document.getElementById('public-results-container');
+    if (infoPanel) {
+        if (db.candidates.length === 0) {
+            infoPanel.innerHTML = '<div class="empty-state">НЕМАЄ ЗАРЕЄСТРОВАНИХ КАНДИДАТІВ ТА ПРОТОКОЛІВ</div>';
+        } else {
+            let html = '<h3 style="color: #FFFF00; margin-bottom: 15px; border-bottom: 2px solid #00FFFF; padding-bottom: 5px;">РЕЙТИНГ СУБ'ЄКТІВ</h3>';
+            db.candidates.forEach(c => {
+                html += `
+                    <div style="background: #000c24; border: 2px solid #00FFFF; padding: 12px; margin-bottom: 10px;">
+                        <div style="display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 5px;">
+                            <span>${c.name}</span>
+                            <span style="color: #FFFF00;">${c.percent}%</span>
+                        </div>
+                        <div style="font-size: 0.8rem; color: #00FFFF; margin-bottom: 8px;">${c.party} (${c.votes} голосів)</div>
+                        <div style="width: 100%; background: #002060; height: 16px; border: 1px solid #00FFFF;">
+                            <div style="width: ${c.percent}%; background: ${c.color === 'leader-zelensky' ? '#00FF00' : (c.color === 'leader-poroshenko' ? '#FF0000' : '#00FFFF')}; height: 100%;"></div>
+                        </div>
+                    </div>
+                `;
             });
+            infoPanel.innerHTML = html;
         }
     }
 
-    // 3. Інтерактивна логіка для спливаючого вікна (Tooltip) на карті
-    const tooltip = document.getElementById('map-tooltip');
-    const regions = document.querySelectorAll('.region');
+    // 3. Фарбуємо SVG-карту на основі регіональних даних Модуля Г
+    if (db.regions) {
+        for (const regId in db.regions) {
+            const regionElement = document.getElementById(regId);
+            const regInfo = db.regions[regId];
 
-    if (tooltip && regions.length > 0) {
-        regions.forEach(region => {
-            region.addEventListener('mousemove', (e) => {
-                const name = region.getAttribute('data-name');
-                const leader = region.getAttribute('data-leader') || 'Немає даних';
-                const percent = region.getAttribute('data-percent') || '0.00';
-                
-                tooltip.innerHTML = `
-                    <strong>${name}</strong><br/>
-                    Лідер: ${leader}<br/>
-                    Результат: <span style="color:#38bdf8; font-weight:bold;">${percent}%</span>
-                `;
-                
-                tooltip.style.display = 'block';
-                tooltip.style.left = (e.pageX + 15) + 'px';
-                tooltip.style.top = (e.pageY - 60) + 'px';
-            });
+            if (regionElement && regInfo) {
+                regionElement.setAttribute('data-leader', regInfo.leader);
+                regionElement.setAttribute('data-percent', regInfo.percent);
 
-            region.addEventListener('mouseleave', () => {
-                tooltip.style.display = 'none';
-            });
-        });
+                regionElement.classList.remove('leader-zelensky', 'leader-poroshenko', 'leader-blue');
+                if (regInfo.leader) {
+                    regionElement.classList.add(regInfo.leader);
+                }
+            }
+        }
     }
 });
