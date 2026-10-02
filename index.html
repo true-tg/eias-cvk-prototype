@@ -4,12 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>АІКС «Вибори» • Публічне табло</title>
-    <!-- Підключення оновленого державного стилю -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Шапка табла (монументальний стиль) -->
+    <!-- Шапка табла -->
     <header>
         <div class="logo-area">
             <h1>АІКС «ВИБОРИ» • Публічне табло</h1>
@@ -18,29 +17,23 @@
     </header>
 
     <!-- Головна робоча зона -->
-    <main style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; align-items: center;">
+    <main style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; align-items: start;">
         
-        <!-- Ліва колонка: Результати голосування (Нульовий стан) -->
-        <div class="card" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
-            <div>
-                <h3>ОПЕРАТИВНІ РЕЗУЛЬТАТИ ГОЛОСУВАННЯ</h3>
-                <p style="color: #FFFFFF; font-size: 0.95rem; margin-bottom: 20px; text-shadow: 1px 1px 1px #000;">
-                    Виборча кампанія у стані ініціалізації. Дані з окружних виборчих комісій очікуються.
-                </p>
-            </div>
+        <!-- Ліва колонка: Динамічний блок результатів кандидатів -->
+        <div class="card" id="public-results-container">
             <div class="empty-state">
                 НЕМАЄ ЗАРЕЄСТРОВАНИХ КАНДИДАТІВ ТА ПРОТОКОЛІВ
             </div>
         </div>
 
-        <!-- Права колонка: Інтерактивна мапа України (Скевоморфізм) -->
+        <!-- Права колонка: Інтерактивна мапа України -->
         <div class="map-container">
             <svg id="ukraine-map" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
-                <!-- Контури регіонів (монументальні прямі блоки для макета) -->
-                <path id="UA-32" class="region" data-name="Київська область" data-leader="Немає даних" data-percent="0.00" d="M350,200 L380,180 L410,210 L390,240 Z" />
-                <path id="UA-46" class="region" data-name="Львівська область" data-leader="Немає даних" data-percent="0.00" d="M120,220 L150,200 L170,230 L140,260 Z" />
-                <path id="UA-12" class="region" data-name="Дніпропетровська область" data-leader="Немає даних" data-percent="0.00" d="M500,280 L550,260 L580,310 L520,330 Z" />
-                <path id="UA-80" class="region" data-name="м. Київ" data-leader="Немає даних" data-percent="0.00" d="M395,215 L405,215 L405,225 L395,225 Z" />
+                <!-- Регіони з ідентифікаторами для зв'язку з адмінкою -->
+                <path id="UA-32" class="region" data-name="Київська область" d="M350,200 L380,180 L410,210 L390,240 Z" />
+                <path id="UA-46" class="region" data-name="Львівська область" d="M120,220 L150,200 L170,230 L140,260 Z" />
+                <path id="UA-12" class="region" data-name="Дніпропетровська область" d="M500,280 L550,260 L580,310 L520,330 Z" />
+                <path id="UA-80" class="region" data-name="м. Київ" d="M395,215 L405,215 L405,225 L395,225 Z" />
             </svg>
             <div id="map-tooltip" class="tooltip"></div>
         </div>
@@ -51,7 +44,28 @@
         ЦЕНТРАЛЬНА ВИБОРЧА КОМІСІЯ УКРАЇНИ • АІКС «ВИБОРИ» • ВЕРСІЯ ПРОТОТИПУ 2010
     </footer>
 
-    <!-- Скрипт синхронізації та підказок -->
+    <!-- Скрипт відображення -->
     <script src="script.js"></script>
+    <script>
+        // Логіка підказок (Tooltip) при наведенні на карту
+        const tooltip = document.getElementById('map-tooltip');
+        const regions = document.querySelectorAll('.region');
+
+        regions.forEach(region => {
+            region.addEventListener('mousemove', (e) => {
+                const name = region.getAttribute('data-name');
+                const percent = region.getAttribute('data-percent') || '0.00';
+                
+                tooltip.innerHTML = `<strong>${name}</strong><br/>Опрацьовано/Лідер: ${percent}%`;
+                tooltip.style.display = 'block';
+                tooltip.style.left = (e.pageX + 15) + 'px';
+                tooltip.style.top = (e.pageY - 50) + 'px';
+            });
+
+            region.addEventListener('mouseleave', () => {
+                tooltip.style.display = 'none';
+            });
+        });
+    </script>
 </body>
 </html>
